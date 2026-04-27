@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block hero_text %}Home{% endblock %}
+{% block hero_content %} 
+<div class="col-md-2 d-flex justify-content-center gap-2">
+    <a href="{% url 'stores' %} " class="btn text-white" style="background-color: var(--green);">Shop</a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'order_history' %} " class="btn text-white" style="background-color: var(--green);">Orders</a>
+    {% else %}
+    <a href="{% url 'login' %} " class="btn text-white" style="background-color: var(--green);">Login</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-5 align-items-center" id="about">
+            <h2 class="thick-heading mb-4 text-center">Our Story</h2>
+    <div class="col-lg-6">
+        <h2 class="mb-4">WHO WE ARE</h2>
+        <p class="lead text-muted">Connecting our community to the freshest local goods, one doorstep at a time. We believe that the best products don't come from a warehouse—they come from your neighbors.</p>
+        <p>Greenfield Local Hub was born out of a simple desire to bridge the gap between rural producers and urban tables. In a world of global supply chains, we choose to look closer to home. By providing a digital storefront for independent farmers, artisans, and makers, we ensure that your hard-earned money stays within the local economy while you enjoy superior, peak-season quality.</p>
+        <p>Our platform is more than just a marketplace; it’s a commitment to sustainability. By reducing "food miles" and supporting small-scale regenerative practices, we are working together to build a more resilient food system. Whether it’s hand-picked berries or handcrafted pottery, every item on GLH tells the story of a local creator dedicated to their craft.</p>
+        <div class="mt-4">
+            <a href="{% url 'stores' %}" class="btn px-4" style="border: 1px solid var(--green); color: var(--green);">Explore Stores</a>
+        </div>
+    </div>
+    <div class="col-lg-6 mt-4 mt-lg-0">
+        <div class="row g-2">
+            <div class="col-6">
+                <img src="{% static 'abt_1.jpg' %}" class="img-fluid rounded shadow-sm" alt="Local Produce" style="height: 200px; width: 100%; object-fit: cover;">
+            </div>
+            <div class="col-6">
+                <img src="{% static 'abt_2.jpg' %}" class="img-fluid rounded shadow-sm" alt="Market Stall" style="height: 200px; width: 100%; object-fit: cover;">
+            </div>
+            <div class="col-6">
+                <img src="{% static 'abt_3.jpg' %}" class="img-fluid rounded shadow-sm" alt="Fresh Vegetables" style="height: 200px; width: 100%; object-fit: cover;">
+            </div>
+            <div class="col-6">
+                <img src="{% static 'abt_4.jpg' %}" class="img-fluid rounded shadow-sm" alt="Local Crafts" style="height: 200px; width: 100%; object-fit: cover;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5" id="stores">
+    <h2 class="text-center thick-heading mb-5">Featured Stores</h2>
+    {% for store in stores|slice:":3" %}
+    <div class="card border-0 shadow-sm rounded-3 mb-5 bg-light">
+        <div class="card-body p-4">
+            <div class="row g-4 align-items-stretch">
+                
+                <div class="col-12 col-lg-3">
+                    {% if store.image %}
+                        <img src="{{ store.image.url }}" class="img-fluid rounded-3 h-100 w-100 object-fit-cover" alt="{{ store.name }}" style="min-height: 250px;">
+                    {% else %}
+                        <img src="{% static 'placeholder.jpg' %}" class="img-fluid rounded-3 h-100 w-100 object-fit-cover" alt="Default Store Image" style="min-height: 250px;">
+                    {% endif %}
+                </div>
+
+                <div class="col-12 col-lg-3 d-flex flex-column">
+                    <h4 class="text-dark fw-bold text-uppercase mb-3">{{ store.name }}</h4>
+                    
+                    <div class="bg-white bg-opacity-50 rounded-3 p-3 mb-3 text-dark fw-medium small shadow-sm">
+                        <div class="mb-1"><i class="fas fa-tag fa-fw" style="color: var(--green);"></i> {{ store.category }}</div>
+                        <div><i class="fas fa-box fa-fw" style="color: var(--green);"></i> {{ store.products.count }} Products</div>
+                        <div><i class="fas fa-envelope fa-fw" style="color: var(--green);"></i> {{ store.owner.email }}</div>
+                    </div>
+
+                    <p class="text-secondary small mb-4">{{ store.description|truncatewords:25 }}</p>
+                    
+                    <div class="mt-auto">
+                        <a href="{% url 'store' store.pk %}" class="btn rounded-pill px-4 fw-bold text-white" style="background-color: var(--green);">
+                            VISIT STORE <i class="fas fa-arrow-circle-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <h5 class="text-dark fw-bold text-uppercase mb-3">Top Products</h5>
+                    <div class="row g-3">
+                        {% for product in store.products.all|slice:":3" %}
+                        <div class="col-12 col-sm-4">
+                            <div class="card h-100 border-0 rounded-3 shadow-sm">
+                                <div class="ratio ratio-4x3">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" class="rounded-top-3 object-fit-cover" alt="{{ product.name }}">
+                                    {% else %}
+                                        <img src="{% static 'placeholder.jpg' %}" class="rounded-top-3 object-fit-cover" alt="Product">
+                                    {% endif %}
+                                </div>
+                                <div class="card-body p-2 d-flex flex-column">
+                                    <h6 class="fw-bold mb-1 small">{{ product.name|truncatechars:20 }}</h6>
+                                    <p class="fw-bold mb-2 small" style="color: var(--green);">£{{ product.price }}</p>
+                                    <div class="mt-auto">
+                                        <a href="{% url 'product' product.pk %}" class="btn btn-sm w-100 py-1" style="border: 1px solid var(--green); color: var(--green); font-size: 0.7rem;">VIEW</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-store-slash fa-3x text-secondary mb-3"></i>
+            <p class="text-secondary">No stores found at the moment. Check back later!</p>
+        </div>
+    {% endfor %}
+    
+    <div class="text-center mt-5">
+        <a href="{% url 'stores' %}" class="btn btn-lg px-5 rounded-pill shadow-sm text-white" style="background-color: var(--green);">View All Stores</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+<div class="p-2" style="background-color: var(--green);" id="support">
+    <h2 class="text-center thick-heading mb-4">Support</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4 mb-5">
+        <div class="col text-center">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="card-body">
+                    <i class="fas fa-comments fa-3x mb-3" style="color: var(--green);"></i>
+                    <h5 class="card-title fw-bold">Chat Now!</h5>
+                    <p class="card-text text-muted">Our team is available 24/7 to help with your queries. Get instant answers regarding your orders or vendor applications through our live messaging service.</p>
+                    <a href="#" class="btn text-white mt-2" style="background-color: var(--green);">Start Chat</a>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="card-body">
+                    <i class="fas fa-envelope fa-3x mb-3" style="color: var(--green);"></i>
+                    <h5 class="card-title fw-bold">Email Us!</h5>
+                    <p class="card-text text-muted">Drop us a message at support@greenfieldhub.co.uk and we’ll get back to you within 24 hours. Perfect for detailed inquiries or feedback.</p>
+                    <a href="mailto:support@greenfield.co.uk" class="btn text-white mt-2" style="background-color: var(--green);">Send Email</a>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="card-body">
+                    <i class="fas fa-phone-alt fa-3x mb-3" style="color: var(--green);"></i>
+                    <h5 class="card-title fw-bold">Call Us!</h5>
+                    <p class="card-text text-muted">Prefer to speak? Give our local support team a call at 01632 960123. We’re available Monday through Friday, 9 AM to 5 PM.</p>
+                    <a href="tel:+1234567890" class="btn text-white mt-2" style="background-color: var(--green);">Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center text-md-start">
+                <h3 class="fw-bold mb-1">Ready to start selling?</h3>
+                <p class="text-muted mb-0">Join hundreds of local businesses reaching customers through Greenfield Local Hub. Scale your reach, manage your inventory with ease, and become part of a growing network of independent sellers.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'register_seller' %}" class="btn btn-lg px-4 text-white" style="background-color: var(--green);">Open Your Store</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

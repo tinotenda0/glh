@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Products{% endblock %}
+    {% block hero_text %}Shop{% endblock %}
+{% block content %}
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Fresh Produce</h2>
+  {% include 'components/product_card.html' with type=fresh_produce %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Bakery</h2>
+  {% include 'components/product_card.html' with type=bakery_products %}
+</div>
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Dairy & Eggs</h2>
+  {% include 'components/product_card.html' with type=dairy_products %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Meat & Poultry</h2>
+  {% include 'components/product_card.html' with type=meat_products %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Pantry Staples</h2>
+  {% include 'components/product_card.html' with type=pantry_products %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Beverages</h2>
+  {% include 'components/product_card.html' with type=beverages %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Organic</h2>
+  {% include 'components/product_card.html' with type=organic_products %}
+</div>
+
+<div class="container mb-5">
+  <h2 class="thick-heading mb-4 text-start">Other</h2>
+  {% include 'components/product_card.html' with type=other_products %}
+</div>
+
+{% endblock %}

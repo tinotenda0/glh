@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Coupon - {{ coupon.code }}{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="d-flex align-items-center mb-4">
+        <a
+          href="{% url 'manage_coupons' store.pk %}"
+          class="btn btn-outline-secondary rounded-circle me-3"
+          style="
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+          <h2 class="fw-bold mb-0">Edit Coupon</h2>
+          <p class="text-muted mb-0">
+            Updating
+            <strong>{{ coupon.code }}</strong>
+            for {{ store.name }}
+          </p>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+          <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label
+                  for="id_code"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Coupon Code
+                </label>
+                <input
+                  type="text"
+                  name="code"
+                  id="id_code"
+                  class="form-control form-control-lg"
+                  value="{{ form.code.value|default:coupon.code }}"
+                  required
+                />
+                {% if form.code.errors %}
+                <div class="text-danger small">{{ form.code.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  for="id_discount_percentage"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Discount Percentage (%)
+                </label>
+                <input
+                  type="number"
+                  name="discount_percentage"
+                  id="id_discount_percentage"
+                  class="form-control"
+                  min="1"
+                  max="100"
+                  value="{{ form.discount_percentage.value|default:coupon.discount_percentage }}"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  for="id_minimum_tier"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Minimum Membership Tier
+                </label>
+                <select
+                  name="minimum_tier"
+                  id="id_minimum_tier"
+                  class="form-select"
+                >
+                  <option value="Bronze" {% if form.minimum_tier.value == 'Bronze' or coupon.minimum_tier == 'Bronze' %}selected{% endif %}>
+                    Bronze
+                  </option>
+                  <option value="Silver" {% if form.minimum_tier.value == 'Silver' or coupon.minimum_tier == 'Silver' %}selected{% endif %}>
+                    Silver
+                  </option>
+                  <option value="Gold" {% if form.minimum_tier.value == 'Gold' or coupon.minimum_tier == 'Gold' %}selected{% endif %}>
+                    Gold
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-12">
+                <label
+                  for="id_expiry_date"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Expiry Date
+                </label>
+                <input
+                  type="datetime-local"
+                  name="expiry_date"
+                  id="id_expiry_date"
+                  class="form-control"
+                  value="{{ form.expiry_date.value|default:coupon.expiry_date|date:'Y-m-d\TH:i' }}"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <div class="form-check form-switch p-3 bg-light rounded border">
+                  <input
+                    class="form-check-input ms-0 me-2"
+                    type="checkbox"
+                    name="is_active"
+                    id="id_is_active"
+                    {% if form.is_active.value or coupon.is_active %}checked{% endif %}
+                  />
+                  <label class="form-check-label fw-bold" for="id_is_active">
+                    Active
+                  </label>
+                  <div class="form-text">
+                    If disabled, customers won't be able to use this coupon.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-5">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg rounded-pill fw-bold"
+              >
+                Update Coupon
+              </button>
+              <a
+                href="{% url 'manage_coupons' store.pk %}"
+                class="btn btn-light btn-lg rounded-pill fw-bold"
+              >
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

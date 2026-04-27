@@ -1,0 +1,36 @@
+<!-- Sidebar Navigation -->
+<div class="col-lg-3">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="p-4 text-center bg-light border-bottom">
+                {% if store.image %}
+                <img src="{{ store.image.url }}" class="img-fluid rounded-circle mb-3 shadow-sm"
+                    style="width: 100px; height: 100px; object-fit: cover;" alt="{{ store.name }}">
+                {% else %}
+                <div class="mb-3">
+                    <i class="fas fa-store fa-4x text-secondary"></i>
+                </div>
+                {% endif %}
+                <h5 class="fw-bold mb-0">{{ store.name }}</h5>
+                <p class="text-muted small mb-0">{{ store.category }}</p>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{% url 'store_dash' store.pk %}" class="list-group-item list-group-item-action py-3 active">
+                    <i class="fas fa-chart-line me-2"></i>Overview
+                </a>
+                <a href="{% url 'manage_products' store.pk %}" class="list-group-item list-group-item-action py-3">
+                    <i class="fas fa-box me-2 text-primary"></i>Products
+                </a>
+                <a href="{% url 'manage_coupons' store.pk %}" class="list-group-item list-group-item-action py-3">
+                    <i class="fas fa-ticket-alt me-2 text-primary"></i>Coupons
+                </a>
+                <a href="{% url 'store' store.pk %}" class="list-group-item list-group-item-action py-3">
+                    <i class="fas fa-external-link-alt me-2 text-primary"></i>View Public Store
+                </a>
+                <a href="{% url 'my_stores' %}" class="list-group-item list-group-item-action py-3">
+                    <i class="fas fa-arrow-left me-2 text-primary"></i>Back to My Stores
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

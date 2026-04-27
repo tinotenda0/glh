@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Feedback Questionnaire{% endblock %}
+
+{% block hero_text %}Feedback Questionnaire{% endblock %}
+{% block hero_content %}
+<p class="text-center text-white mb-2">
+  Help us improve Greenfield Local Hub by sharing your experience!
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      
+      <form action="#" method="POST">
+        {% csrf_token %}
+
+        <!-- NON-TECHNICAL AUDIENCE SECTION -->
+        <div class="card border-0 shadow-sm rounded-4 mb-5">
+          <div class="card-header bg-primary text-white p-4 rounded-top-4">
+            <h3 class="mb-0"><i class="fas fa-users me-2"></i> Section 1: User Experience (Customers & Sellers)</h3>
+          </div>
+          <div class="card-body p-4 p-md-5">
+            
+            <!-- Q1: Radio -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">1. What is your primary role on the platform?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="user_role" id="roleCustomer" value="customer" required>
+                <label class="form-check-label" for="roleCustomer">Customer</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="user_role" id="roleSeller" value="seller">
+                <label class="form-check-label" for="roleSeller">Seller</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="user_role" id="roleBoth" value="both">
+                <label class="form-check-label" for="roleBoth">Both</label>
+              </div>
+            </div>
+
+            <!-- Q2: Range/Rating -->
+            <div class="mb-4">
+              <label for="accountCreation" class="form-label fw-bold">2. On a scale of 1 to 5, how easy was it to register and understand account roles?</label>
+              <input type="range" class="form-range" min="1" max="5" step="1" id="accountCreation" name="account_creation">
+              <div class="d-flex justify-content-between text-muted small">
+                <span>1 (Very Difficult)</span>
+                <span>5 (Very Easy)</span>
+              </div>
+            </div>
+
+            <!-- Q3: Select -->
+            <div class="mb-4">
+              <label for="browsingIntuitive" class="form-label fw-bold">3. How intuitive is the navigation when browsing different local stores?</label>
+              <select class="form-select" id="browsingIntuitive" name="browsing_intuitive">
+                <option value="" selected disabled>Select an option...</option>
+                <option value="very_intuitive">Very Intuitive</option>
+                <option value="somewhat">Somewhat Intuitive</option>
+                <option value="neutral">Neutral</option>
+                <option value="confusing">Confusing</option>
+                <option value="very_confusing">Very Confusing</option>
+              </select>
+            </div>
+
+            <!-- Q4: Checkboxes -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">4. Which cart management features did you use easily? (Check all that apply)</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="add" id="cartAdd" name="cart_features">
+                <label class="form-check-label" for="cartAdd">Adding items to cart</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="adjust" id="cartAdjust" name="cart_features">
+                <label class="form-check-label" for="cartAdjust">Adjusting item quantities</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="remove" id="cartRemove" name="cart_features">
+                <label class="form-check-label" for="cartRemove">Removing items before checkout</label>
+              </div>
+            </div>
+
+            <!-- Q5: Rating Radio -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">5. How smooth was the final checkout and payment process?</label>
+              <div class="d-flex gap-3">
+                {% for i in '12345'|make_list %}
+                <div class="form-check form-check-inline m-0">
+                  <input class="form-check-input" type="radio" name="checkout_smoothness" id="checkout{{ i }}" value="{{ i }}">
+                  <label class="form-check-label" for="checkout{{ i }}">{{ i }}</label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Q6: Radio Yes/No -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">6. Are the rules for the GLH Loyalty Program easy to understand?</label>
+              <div>
+                <input type="radio" class="btn-check" name="loyalty_clarity" id="loyaltyYes" value="yes">
+                <label class="btn btn-outline-success btn-sm me-2" for="loyaltyYes">Yes, very clear</label>
+                
+                <input type="radio" class="btn-check" name="loyalty_clarity" id="loyaltyNo" value="no">
+                <label class="btn btn-outline-danger btn-sm" for="loyaltyNo">No, confusing</label>
+              </div>
+            </div>
+
+            <!-- Q7: Select -->
+            <div class="mb-4">
+              <label for="loyaltyTier" class="form-label fw-bold">7. Were you able to easily locate your current Loyalty Tier?</label>
+              <select class="form-select" id="loyaltyTier" name="loyalty_tier_visible">
+                <option value="easy">Yes, it was prominent on my dashboard</option>
+                <option value="hard">I found it, but it took some searching</option>
+                <option value="unnoticed">I didn't know where to look</option>
+              </select>
+            </div>
+
+            <!-- Q8: Textarea -->
+            <div class="mb-4">
+              <label for="couponExperience" class="form-label fw-bold">8. Describe your experience applying a discount coupon code during checkout.</label>
+              <textarea class="form-control" id="couponExperience" name="coupon_experience" rows="3" placeholder="Was it simple? Did it work as expected?"></textarea>
+            </div>
+
+            <!-- Q9: Range (Seller Specific) -->
+            <div class="mb-4 p-3 bg-light border rounded">
+              <span class="badge bg-secondary mb-2">Sellers Only</span>
+              <label for="storeSetup" class="form-label fw-bold d-block">9. How easy was it to create your store profile (logo, description)?</label>
+              <input type="range" class="form-range" min="1" max="5" step="1" id="storeSetup" name="store_setup">
+            </div>
+
+            <!-- Q10: Select (Seller Specific) -->
+            <div class="mb-4 p-3 bg-light border rounded">
+              <span class="badge bg-secondary mb-2">Sellers Only</span>
+              <label for="productMgmt" class="form-label fw-bold">10. How user-friendly is the product inventory management process?</label>
+              <select class="form-select" id="productMgmt" name="product_mgmt">
+                <option value="excellent">Excellent</option>
+                <option value="good">Good</option>
+                <option value="average">Average</option>
+                <option value="poor">Poor</option>
+              </select>
+            </div>
+
+            <!-- Q11: Radio Yes/No (Seller Specific) -->
+            <div class="mb-4 p-3 bg-light border rounded">
+              <span class="badge bg-secondary mb-2">Sellers Only</span>
+              <label class="form-label fw-bold">11. Can you effectively track incoming orders and update statuses?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="order_tracking" id="trackYes" value="yes">
+                <label class="form-check-label" for="trackYes">Yes</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="order_tracking" id="trackNo" value="no">
+                <label class="form-check-label" for="trackNo">No</label>
+              </div>
+            </div>
+
+            <!-- Q12: Text input (Seller Specific) -->
+            <div class="mb-4 p-3 bg-light border rounded">
+              <span class="badge bg-secondary mb-2">Sellers Only</span>
+              <label for="couponCreation" class="form-label fw-bold">12. What was the most challenging part of generating promotional coupons?</label>
+              <input type="text" class="form-control" id="couponCreation" name="coupon_creation" placeholder="e.g., Setting expiry dates">
+            </div>
+
+            <!-- Q13: Radio 1-5 -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">13. How useful do you find the personal dashboard for viewing order history?</label>
+              <div class="d-flex gap-3">
+                {% for i in '12345'|make_list %}
+                <div class="form-check form-check-inline m-0">
+                  <input class="form-check-input" type="radio" name="dashboard_useful" id="dash{{ i }}" value="{{ i }}">
+                  <label class="form-check-label" for="dash{{ i }}">{{ i }}</label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Q14: Checkboxes -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">14. Which device(s) did you primarily use to access the platform? (Check all that apply)</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="deviceMobile" name="devices">
+                <label class="form-check-label" for="deviceMobile">Mobile Phone</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="deviceTablet" name="devices">
+                <label class="form-check-label" for="deviceTablet">Tablet</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="deviceDesktop" name="devices">
+                <label class="form-check-label" for="deviceDesktop">Desktop / Laptop</label>
+              </div>
+            </div>
+
+            <!-- Q15: Textarea -->
+            <div class="mb-4">
+              <label for="generalFeedback" class="form-label fw-bold">15. What is one feature you would add or change to improve your overall experience?</label>
+              <textarea class="form-control" id="generalFeedback" name="general_feedback" rows="4"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TECHNICAL AUDIENCE SECTION -->
+        <div class="card border-0 shadow-sm rounded-4 mb-5">
+          <div class="card-header bg-dark text-white p-4 rounded-top-4">
+            <h3 class="mb-0"><i class="fas fa-code me-2"></i> Section 2: Technical Feedback (Devs, QA, Admins)</h3>
+          </div>
+          <div class="card-body p-4 p-md-5">
+
+            <!-- Q1: Select -->
+            <div class="mb-4">
+              <label for="architectureRate" class="form-label fw-bold">1. How would you rate the separation of concerns across Django apps (`glh`, `accounts`, `app`)?</label>
+              <select class="form-select" id="architectureRate" name="tech_architecture">
+                <option value="10">10 - Excellent</option>
+                <option value="8">8 - Good</option>
+                <option value="5">5 - Average, needs some refactoring</option>
+                <option value="3">3 - Poor separation</option>
+              </select>
+            </div>
+
+            <!-- Q2: Textarea -->
+            <div class="mb-4">
+              <label for="dbModeling" class="form-label fw-bold">2. Are the database models optimally designed? Identify any areas where normalization could be improved.</label>
+              <textarea class="form-control text-monospace" id="dbModeling" name="tech_db_modeling" rows="3"></textarea>
+            </div>
+
+            <!-- Q3: Radio -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">3. Does the extension of `AbstractUser` with boolean flags effectively handle authorization?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_role_mgmt" id="roleEffective" value="effective">
+                <label class="form-check-label" for="roleEffective">Highly Effective</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_role_mgmt" id="roleImprove" value="needs_improvement">
+                <label class="form-check-label" for="roleImprove">Needs Improvement (e.g., Use proper Groups/Permissions instead)</label>
+              </div>
+            </div>
+
+            <!-- Q4: Select -->
+            <div class="mb-4">
+              <label for="decoratorsAccess" class="form-label fw-bold">4. How secure are the custom view decorators (e.g., `@group_required`)?</label>
+              <select class="form-select" id="decoratorsAccess" name="tech_decorators">
+                <option value="secure">Secure and well-applied</option>
+                <option value="vulnerable">Potentially vulnerable to bypass</option>
+                <option value="redundant">Redundant</option>
+              </select>
+            </div>
+
+            <!-- Q5: Rating 1-5 -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">5. Rate the robustness of the checkout logic regarding atomic database transactions (1=Poor, 5=Robust):</label>
+              <input type="range" class="form-range" min="1" max="5" step="1" name="tech_checkout_atomic">
+            </div>
+
+            <!-- Q6: Radio Yes/No -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">6. Is storing the applied coupon data in the Django request session the most secure approach?</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tech_session" id="sessionYes" value="yes">
+                <label class="form-check-label" for="sessionYes">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tech_session" id="sessionNo" value="no">
+                <label class="form-check-label" for="sessionNo">No, store it in the database</label>
+              </div>
+            </div>
+
+            <!-- Q7: Text input -->
+            <div class="mb-4">
+              <label for="ormN1" class="form-label fw-bold">7. Specify any potential N+1 query performance issues noticed within the views:</label>
+              <input type="text" class="form-control text-monospace" id="ormN1" name="tech_orm" placeholder="e.g., Product.objects.all() in store_detail">
+            </div>
+
+            <!-- Q8: Checkboxes -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">8. Which coupon security validations need strengthening? (Select all that apply)</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="expiry" id="secExpiry" name="tech_sec_coupon">
+                <label class="form-check-label" for="secExpiry">Expiry date validation</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="tier" id="secTier" name="tech_sec_coupon">
+                <label class="form-check-label" for="secTier">Minimum loyalty tier checks</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="ownership" id="secOwner" name="tech_sec_coupon">
+                <label class="form-check-label" for="secOwner">Store-specific product restrictions</label>
+              </div>
+            </div>
+
+            <!-- Q9: Textarea -->
+            <div class="mb-4">
+              <label for="fileHandling" class="form-label fw-bold">9. How effectively is the application handling media uploads for a production environment?</label>
+              <textarea class="form-control" id="fileHandling" name="tech_files" rows="2"></textarea>
+            </div>
+
+            <!-- Q10: Select -->
+            <div class="mb-4">
+              <label for="errorHandling" class="form-label fw-bold">10. Evaluate the custom 404 and 500 error page handling:</label>
+              <select class="form-select" id="errorHandling" name="tech_errors">
+                <option value="good">Standard and sufficient</option>
+                <option value="logging">Needs better error logging integration (e.g., Sentry)</option>
+                <option value="ux">UX needs improvement on error pages</option>
+              </select>
+            </div>
+
+            <!-- Q11: Text input -->
+            <div class="mb-4">
+              <label for="fatViews" class="form-label fw-bold">11. Name one "fat view" that should be refactored to move logic into models or services:</label>
+              <input type="text" class="form-control text-monospace" id="fatViews" name="tech_fat_views" placeholder="e.g., checkout view">
+            </div>
+
+            <!-- Q12: Radio -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">12. Is relying on `price_at_purchase` in `OrderItem` safe enough for historical records without a soft-delete mechanism?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_integrity" id="intSafe" value="safe">
+                <label class="form-check-label" for="intSafe">Yes, it preserves the financial record.</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_integrity" id="intUnsafe" value="unsafe">
+                <label class="form-check-label" for="intUnsafe">No, related foreign keys could cascade delete orders.</label>
+              </div>
+            </div>
+
+            <!-- Q13: Textarea -->
+            <div class="mb-4">
+              <label for="scalability" class="form-label fw-bold">13. Foreseeable bottlenecks migrating from SQLite3 to PostgreSQL?</label>
+              <textarea class="form-control" id="scalability" name="tech_scale" rows="2"></textarea>
+            </div>
+
+            <!-- Q14: Checkboxes -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">14. What testing strategies should be prioritized? (Select all that apply)</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="testUnit" name="tech_tests">
+                <label class="form-check-label" for="testUnit">Unit Testing (PyTest/Unittest)</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="testIntegration" name="tech_tests">
+                <label class="form-check-label" for="testIntegration">Integration Testing</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="testE2E" name="tech_tests">
+                <label class="form-check-label" for="testE2E">End-to-End Testing (Selenium/Cypress)</label>
+              </div>
+            </div>
+
+            <!-- Q15: Radio Yes/No -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">15. Should frontend parts (like Cart) be migrated to async API calls (Django REST Framework) for better UX?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_api" id="apiYes" value="yes">
+                <label class="form-check-label" for="apiYes">Yes, highly recommended</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tech_api" id="apiNo" value="no">
+                <label class="form-check-label" for="apiNo">No, Django Templates with HTMX is sufficient</label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="text-center mb-5">
+          <button type="submit" class="btn btn-lg text-white px-5 rounded-pill" style="background-color: var(--green);">
+            Submit Feedback <i class="fas fa-paper-plane ms-2"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

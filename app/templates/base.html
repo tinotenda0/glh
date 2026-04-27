@@ -1,0 +1,232 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} | Greenfield Local Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Free Cookie Consent Notice Banner by ComplyDog at https://complydog.com/free-cookie-consent-banner -->
+    <script type="text/javascript">
+    (function (c, d, o, g) {
+      c.cdogSettings = { version: "1.0.0" };
+      o = d.getElementsByTagName("head")[0];
+      g = d.createElement("script");
+      g.async = 1;
+      g.src =
+        "https://app.complydog.com/cookie-consent-tool.js" +
+        "?v=" +
+        c.cdogSettings.version +
+        "&website=" +
+        window.location.href;
+      g.setAttribute("cdog-campaign", c.cdogSettings.campaignId);
+      !c.cdogInit ? o.appendChild(g) : "";
+    })(window, document);
+
+    window.cdogLocalSettings = {
+  "campaign": {
+    "design": {
+      "theme": {
+        "buttons": {
+          "color": "#2D3047",
+          "backgroundColor": "#E0A458",
+          "borderRadius": "20px",
+          "buttonType": "raised",
+          "buttonHighlightColor": "#FFDBB5"
+        },
+        "cookieWidget": {
+          "color": "#F9F9F9",
+          "backgroundColor": "#419D78",
+          "borderRadius": "24px",
+          "maxWidth": "574px"
+        },
+        "globalPrimaryText": {
+          "color": "#F9F9F9"
+        },
+        "globalBodyBackground": {
+          "backgroundColor": "#419D78"
+        }
+      }
+    },
+    "cookieWindow": {
+      "privacyPreferenceCenterText": "Control Your Privacy",
+      "disclaimerText": "Websites may store or retrieve information on your browser, mostly in the form of cookies.",
+      "manageConsentPreferencesText": "Choose Which Cookies To Enable",
+      "confirmMyChoicesText": "Confirm My Choices",
+      "cookiesTypeStrictlyNecessary": "Strictly Necessary",
+      "cookiesTypeStrictlyNecessaryText": "Strictly necessary cookies enable w..."
+    },
+    "cookieWidget": {
+      "placement": "br",
+      "icon": "default",
+      "description": "We use cookies as an essential part of our website.",
+      "customizeSettingsText": "Customize Settings",
+      "allowAllText": "Allow All",
+      "manageSettingsText": ""
+    }
+  },
+  "cookieTool": true
+};
+    </script>
+
+
+</head>
+<body>
+<nav class="navbar dark-bg sticky-top navbar-expand-lg" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="{% static 'logo.svg' %}" alt="GLH logo" width="100" height="24" class="d-inline-block align-text-top">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsenav" aria-controls="collapsenav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsenav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'index' %}#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'index' %}#support">Support</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'stores' %}">Stores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'products' %}">Shop</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'view_cart' %}">
+            <i class="fas fa-shopping-cart"></i> Basket
+          </a>  
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle white-text" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              
+            {% if user.image %}
+            <img
+              src="{{ user.image.url }}"
+              alt="{{ user.username }}"
+              class="rounded-circle"
+              style="width: 25px; height: 25px; object-fit: cover"
+            />
+            {% else %}
+            <i class="fas fa-user-circle me-1"></i>
+            {% endif %}
+            {{ user.first_name|default:user.username }}
+            
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'order_history' %}">Orders</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white-text" href="{% url 'register_customer' %}">Register</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+  {% if user.is_authenticated %}
+<div class="bg-light border-bottom py-2">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="small text-muted">
+            <i class="fas fa-crown text-warning me-1"></i>
+            <strong>MyGLH Rewards:</strong> {{ user.loyalty_account.points }} Points
+        </div>
+        <div class="small">
+            <a href="{% url 'stores' %}" class="text-decoration-none text-primary fw-bold">
+                Shop Now <i class="fas fa-chevron-right ms-1" style="font-size: 0.7rem;"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="hero">
+  <div class="hero-overlay">
+    <div class="row spacer"></div>
+    <div class="row justify-content-center align-items-center">
+      <h2 class="hero-text">{% block hero_text %}{% endblock %}</h2>
+    {% block hero_content %}{% endblock %}
+    </div>
+</div>
+</div>
+
+<div class="container pt-3 pb-3">
+{% block content %}
+{% endblock %}
+</div>
+
+{% block footer %}{% endblock %}
+
+ 
+<footer class="footer mt-auto dark-bg py-5">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4 col-md-12">
+        <img src="{% static 'logo.svg' %}" alt="GLH logo" width="120" height="30" class="mb-3">
+        <p class="text-white opacity-75">
+          Greenfield Local Hub is your premier digital marketplace for regional excellence. We empower local creators and provide families with transparent access to the very best our community has to offer. Built by locals, for locals.
+        </p>
+      </div>
+      <div class="col-lg-2 col-6 col-md-4">
+        <h5 class="text-white text-uppercase mb-3">Support</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white-50 text-decoration-none">Help Center</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Contact Us</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Live Chat</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6 col-md-4">
+        <h5 class="text-white text-uppercase mb-3">My Account</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white-50 text-decoration-none">Profile</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Membership</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Offers</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Orders</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6 col-md-4">
+        <h5 class="text-white text-uppercase mb-3">Orders</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white-50 text-decoration-none">View All</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Track Order</a></li>
+          <li><a href="#" class="text-white-50 text-decoration-none">Returns</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-white opacity-25 my-4">
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="text-white-50 mb-0">&copy; 2026 Greenfield Local Hub. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/811a7358eb.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

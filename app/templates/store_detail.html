@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} {{ store.name }} {% endblock %}
+
+{% block hero_text %} {{ store.name }} {% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-2">
+    <!-- Store Sidebar Info -->
+    <div class="col-lg-4">
+      <div
+        class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top"
+        style="top: 100px"
+      >
+        {% if store.image %}
+        <img
+          src="{{ store.image.url }}"
+          class="img-fluid w-100 object-fit-cover"
+          alt="{{ store.name }}"
+          style="height: 300px"
+        />
+        {% else %}
+        <img
+          src="{% static 'placeholder.jpg' %}"
+          class="img-fluid w-100 object-fit-cover"
+          alt="Store Placeholder"
+          style="height: 300px"
+        />
+        {% endif %}
+        <div class="card-body p-4">
+          <span
+            class="badge bg-success bg-opacity-10 mb-2 px-3 py-2 rounded-pill"
+          >
+            {{ store.category }}
+          </span>
+          <h3 class="fw-bold mb-3">{{ store.name }}</h3>
+          <p class="text-muted mb-4">{{ store.description }}</p>
+
+          <div class="border-top pt-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-envelope text-muted me-3"></i>
+              <div>
+                <small class="text-muted d-block">Contact</small>
+                <a
+                  href="mailto:{{ store.owner.email }}"
+                  class="text-decoration-none text-dark"
+                >
+                  {{ store.owner.email }}
+                </a>
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-box text-muted me-3"></i>
+              <div>
+                <small class="text-muted d-block">Inventory</small>
+                <span class="fw-bold">{{ store.products.count }} Products Available</span>
+              </div>
+            </div>
+          </div>
+
+          {% if store.coupons.all %}
+          <div
+            class="mt-4 p-3 bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-3"
+          >
+            <h6 class="fw-bold text-dark mb-2">
+              <i class="fas fa-ticket-alt me-2"></i>
+              Active Coupons
+            </h6>
+            {% for coupon in store.coupons.all %}
+            <div
+              class="d-flex justify-content-between align-items-center mb-2 last-child-mb-0"
+            >
+              <code>{{ coupon.code }}</code>
+              <span class="badge bg-warning text-dark">
+                {{ coupon.discount_percentage }}% OFF
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Store Products Grid -->
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="thick-heading mb-0">Store Products</h2>
+      </div>
+
+      {% include 'components/product_card.html' with type=store.products.all %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

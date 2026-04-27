@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Store Orders - {{ store.name }}{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+  <h2 class="fw-bold">Store Orders</h2>
+  <p class="text-muted">
+    Manage orders for
+    <strong>{{ store.name }}</strong>
+  </p>
+</div>
+
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'store_dash' store.pk %}">{{ store.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Orders</li>
+  </ol>
+</nav>
+
+{% if orders %}
+<div class="list-group">
+  {% for order in orders %}
+  <div class="card mb-3 shadow-sm">
+    <div
+      class="card-header bg-light d-flex justify-content-between align-items-center"
+    >
+      <div>
+        <span class="fw-bold">Order #{{ order.id }}</span>
+        <small class="text-muted ms-2">{{ order.created_at|date:"d M Y H:i" }}</small>
+      </div>
+      <span
+        class="badge {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Pending' %}bg-warning text-dark{% else %}bg-secondary{% endif %}"
+      >
+        {{ order.status }}
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <h6 class="fw-bold mb-1">Customer: {{ order.customer.first_name|default:order.customer.username }}</h6>
+        <p class="small text-muted mb-0">Email: {{ order.customer.email }}</p>
+      </div>
+
+      <table class="table table-sm table-borderless">
+        <thead>
+          <tr class="text-muted small">
+            <th>Item</th>
+            <th class="text-center">Qty</th>
+            <th class="text-end">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items.all %}
+          {% if item.product.store == store %}
+          <tr class="small">
+            <td>{{ item.product.name }}</td>
+            <td class="text-center">{{ item.quantity }}</td>
+            <td class="text-end">£{{ item.price_at_purchase }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr class="border-top">
+            <td colspan="2" class="fw-bold">Total</td>
+            <td class="text-end fw-bold text-primary">£{{ order.total_amount }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="card-footer bg-white">
+      <form
+        action="{% url 'update_order_status' order.pk %}"
+        method="post"
+        class="d-flex align-items-center"
+      >
+        {% csrf_token %}
+        <select
+          name="status"
+          class="form-select form-select-sm me-2"
+          style="max-width: 150px"
+        >
+          <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>
+            Pending
+          </option>
+          <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>
+            Processing
+          </option>
+          <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>
+            Shipped
+          </option>
+          <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>
+            Completed
+          </option>
+          <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>
+            Cancelled
+          </option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-primary">
+          Update Status
+        </button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 border rounded bg-light">
+  <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+  <p class="lead text-muted">No orders found for this store.</p>
+</div>
+{% endif %}
+
+<div class="mt-4">
+  <a href="{% url 'store_dash' store.pk %}" class="text-decoration-none text-muted">
+    <i class="fas fa-arrow-left me-1"></i>
+    Back to Store Dashboard
+  </a>
+</div>
+{% endblock %}

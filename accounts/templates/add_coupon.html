@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create Coupon - {{ store.name }}
+{% endblock %}
+{% block content %}
+
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="d-flex align-items-center mb-4">
+        <a
+          href="{% url 'manage_coupons' store.pk %}"
+          class="btn btn-outline-secondary rounded-circle me-3"
+          style="
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+          <h2 class="fw-bold mb-0">Create New Coupon</h2>
+          <p class="text-muted mb-0">
+            Add a discount code for
+            <strong>{{ store.name }}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+          <form method="post" class="needs-validation">
+            {% csrf_token %}
+
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label
+                  for="id_code"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Coupon Code
+                </label>
+                <input
+                  type="text"
+                  name="code"
+                  id="id_code"
+                  class="form-control form-control-lg"
+                  placeholder="e.g. SUMMER25"
+                  required
+                />
+                {% if form.code.errors %}
+                <div class="text-danger small">{{ form.code.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  for="id_discount_percentage"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Discount Percentage (%)
+                </label>
+                <input
+                  type="number"
+                  name="discount_percentage"
+                  id="id_discount_percentage"
+                  class="form-control"
+                  min="1"
+                  max="100"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label
+                  for="id_minimum_tier"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Minimum Membership Tier
+                </label>
+                <select
+                  name="minimum_tier"
+                  id="id_minimum_tier"
+                  class="form-select"
+                >
+                  <option value="Bronze">Bronze</option>
+                  <option value="Silver">Silver</option>
+                  <option value="Gold">Gold</option>
+                </select>
+              </div>
+
+              <div class="col-md-12">
+                <label
+                  for="id_expiry_date"
+                  class="form-label fw-bold small text-uppercase"
+                >
+                  Expiry Date
+                </label>
+                <input
+                  type="datetime-local"
+                  name="expiry_date"
+                  id="id_expiry_date"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <div class="form-check form-switch p-3 bg-light rounded border">
+                  <input
+                    class="form-check-input ms-0 me-2"
+                    type="checkbox"
+                    name="is_active"
+                    id="id_is_active"
+                    checked
+                  />
+                  <label class="form-check-label fw-bold" for="id_is_active">
+                    Active
+                  </label>
+                  <div class="form-text">
+                    If disabled, customers won't be able to use this coupon.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-5">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg rounded-pill fw-bold"
+              >
+                Create Coupon
+              </button>
+              <a
+                href="{% url 'manage_coupons' store.pk %}"
+                class="btn btn-link text-muted text-decoration-none"
+              >
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

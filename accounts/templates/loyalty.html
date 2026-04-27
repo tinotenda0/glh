@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Loyalty Program{% endblock %}
+{% block hero_text %}MyGLH{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="card-header bg-primary text-white py-4 text-center">
+          <i class="fas fa-crown fa-3x mb-3"></i>
+          <h2 class="fw-bold mb-0">Loyalty Rewards</h2>
+          <p class="mb-0 opacity-75">
+            Thank you for supporting local businesses
+          </p>
+        </div>
+        <div class="card-body p-5">
+          <div class="row align-items-center mb-5">
+            <div class="col-md-6 text-center border-end">
+              <h6 class="text-muted text-uppercase fw-bold small mb-2">
+                Current Balance
+              </h6>
+              <h1 class="display-4 fw-black text-primary mb-0">
+                {{ loyalty_account.points }}
+              </h1>
+              <p class="text-muted">GLH Points</p>
+            </div>
+            <div class="col-md-6 text-center">
+              <h6 class="text-muted text-uppercase fw-bold small mb-2">
+                Membership Tier
+              </h6>
+              <h3 class="fw-bold text-dark mb-0">
+                {% if loyalty_account.points > 1000 %}
+                <span class="text-warning">
+                  <i class="fas fa-gem me-2"></i>
+                  Gold
+                </span>
+                {% elif loyalty_account.points > 500 %}
+                <span class="text-secondary">
+                  <i class="fas fa-medal me-2"></i>
+                  Silver
+                </span>
+                {% else %}
+                <span class="text-bronze">
+                  <i class="fas fa-award me-2"></i>
+                  Bronze
+                </span>
+                {% endif %}
+              </h3>
+              <p class="text-muted">Status</p>
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-4">How to earn points</h5>
+          <div class="row g-4 mb-5">
+            <div class="col-md-4">
+              <div class="text-center">
+                <div
+                  class="bg-light-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  style="width: 60px; height: 60px"
+                >
+                  <i class="fas fa-shopping-cart text-primary fa-lg"></i>
+                </div>
+                <h6 class="fw-bold">Shop Local</h6>
+                <p class="text-muted small">
+                  Earn 10 points for every £1 spent in any store.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <div
+                  class="bg-light-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  style="width: 60px; height: 60px"
+                >
+                  <i class="fas fa-star text-success fa-lg"></i>
+                </div>
+                <h6 class="fw-bold">Review Products</h6>
+                <p class="text-muted small">
+                  Get 10 points for every verified product review.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <div
+                  class="bg-light-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  style="width: 60px; height: 60px"
+                >
+                  <i class="fas fa-share-alt text-info fa-lg"></i>
+                </div>
+                <h6 class="fw-bold">Refer Friends</h6>
+                <p class="text-muted small">
+                  Earn 50 points when a friend makes their first purchase.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info border-0 shadow-sm p-4">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-gift fa-2x me-3 text-primary"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Redeem your points</h6>
+                <p class="mb-0 small">
+                  You can use your points at checkout to get discounts on your
+                  next order. 100 points = £1 discount.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-5">
+            <a href="{% url 'stores' %}" class="btn btn-primary btn-lg px-5">
+              Start Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

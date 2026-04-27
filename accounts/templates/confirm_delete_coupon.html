@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Delete Coupon - {{ coupon.code }}{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-5 text-center">
+          <div class="mb-4">
+            <i
+              class="fas fa-exclamation-circle fa-4x text-danger opacity-25"
+            ></i>
+          </div>
+          <h2 class="fw-bold mb-3">Delete Coupon?</h2>
+          <p class="text-muted mb-4">
+            Are you sure you want to delete the coupon code
+            <strong class="text-dark">{{ coupon.code }}</strong>
+            ? This action cannot be undone and customers will no longer be able
+            to use this discount.
+          </p>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-danger btn-lg rounded-pill fw-bold"
+              >
+                <i class="fas fa-trash-alt me-2"></i>
+                Confirm Delete
+              </button>
+              <a
+                href="{% url 'manage_coupons' store.pk %}"
+                class="btn btn-light btn-lg rounded-pill fw-bold"
+              >
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

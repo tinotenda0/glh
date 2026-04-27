@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+{% block hero_text %}Welcome, {{ user.first_name }}!{% endblock %}
+
+{% block hero_content %}
+<div class="text-center mb-4">
+  <h2 class="fw-bold"></h2>
+  <p class="text-white">Manage your account and activities</p>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row g-4">
+  {% if user.is_seller %}
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm bg-primary text-white h-100">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="fw-bold mb-1">Seller Dashboard</h5>
+            <p class="mb-0 opacity-75">Manage your stores and products</p>
+          </div>
+          <i class="fas fa-store fa-2x opacity-50"></i>
+        </div>
+        <hr class="my-3 opacity-25" />
+        <div class="d-grid">
+          <a href="{% url 'my_stores' %}" class="btn btn-light fw-bold">
+            Go to My Stores
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm bg-success text-white h-100">
+      <div class="card-body p-4 text-center">
+        <i class="fas fa-rocket fa-3x mb-3"></i>
+        <h5 class="fw-bold">Start Selling Today!</h5>
+        <p class="mb-4">
+          Turn your passion into a business and reach local customers.
+        </p>
+        <a href="{% url 'register_seller' %}" class="btn btn-light btn-lg px-4 fw-bold">
+          Become a Seller
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-light-warning rounded p-3 me-3">
+            <i class="fas fa-crown text-warning fa-lg"></i>
+          </div>
+          <div>
+            <h6 class="text-muted text-uppercase fw-bold small mb-0">
+              Loyalty Points
+            </h6>
+            <h4 class="fw-bold mb-0">{{ user.loyalty_account.points }}</h4>
+          </div>
+        </div>
+        <div class="d-grid">
+          <a
+            href="{% url 'loyalty' %}"
+            class="btn btn-outline-warning btn-sm fw-bold"
+          >
+            View Rewards
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-light-primary rounded p-3 me-3">
+            <i class="fas fa-shopping-bag text-primary fa-lg"></i>
+          </div>
+          <div>
+            <h6 class="text-muted text-uppercase fw-bold small mb-0">
+              Recent Orders
+            </h6>
+            <h4 class="fw-bold mb-0">{{ user.orders.count }}</h4>
+          </div>
+        </div>
+        <div class="d-grid">
+          <a
+            href="{% url 'order_history' %}"
+            class="btn btn-outline-primary btn-sm fw-bold"
+          >
+            Order History
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-5 text-center">
+  <a href="{% url 'index' %}" class="text-decoration-none text-muted">
+    <i class="fas fa-arrow-left me-1"></i>
+    Back to Home
+  </a>
+</div>
+{% endblock %}

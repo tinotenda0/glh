@@ -1,0 +1,54 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block title %}My Stores{% endblock %}
+
+{% block hero_text %}My Stores{% endblock %}
+
+{% block hero_content %}
+<div class="text-center mb-4">
+  <p class="text-white">Manage your business presence on GLH</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="d-grid gap-2 mb-4">
+  <a href="{% url 'create_store' %}" class="btn btn-success btn-lg">
+    <i class="fas fa-plus me-2"></i>
+    Create New Store
+  </a>
+</div>
+
+{% if stores %}
+<div class="list-group">
+  {% for store in stores %}
+  <a
+    href="{% url 'store_dash' store.pk %}"
+    class="list-group-item list-group-item-action mb-3 shadow-sm border rounded p-4"
+  >
+    <div class="d-flex w-100 justify-content-between align-items-center">
+      <div>
+        <h5 class="mb-1 fw-bold text-primary">{{ store.name }}</h5>
+        <p class="mb-1 text-muted small">{{ store.description|truncatechars:100 }}</p>
+        <span class="badge bg-info text-dark">{{ store.category }}</span>
+      </div>
+      <i class="fas fa-chevron-right text-muted"></i>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 border rounded bg-light">
+  <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
+  <p class="lead text-muted">You don't have any stores yet.</p>
+  <a href="{% url 'create_store' %}" class="btn btn-primary">Set Up Your First Store</a>
+</div>
+{% endif %}
+
+<div class="mt-4 text-center">
+  <a href="{% url 'dash' %}" class="text-decoration-none text-muted">
+    <i class="fas fa-arrow-left me-1"></i>
+    Back to Dashboard
+  </a>
+</div>
+{% endblock %}

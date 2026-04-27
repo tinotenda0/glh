@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Account | {{ user.first_name }} {% endblock %}
+{% block hero_text %}Welcome {{ user.first_name }} {% endblock %}
+{% block hero_content %}
+<p class="text-center text-white mb-2">
+  Manage your profile, view your orders, and track your rewards.
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row g-4">
+    <!-- Sidebar Navigation -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+          <div class="p-4 text-center bg-light border-bottom">
+            <div class="mb-3">
+              {% if user.image %}
+              <img
+                src="{{ user.image.url }}"
+                alt="{{ user.username }}"
+                class="rounded-circle img-thumbnail shadow-sm mb-3"
+                style="width: 100px; height: 100px; object-fit: cover"
+              />
+              {% else %}
+              <i class="fas fa-user-circle fa-5x text-secondary mb-3"></i>
+              {% endif %}
+              
+            </div>
+            <h5 class="fw-bold mb-0">{{ user.get_full_name|default:user.username }}</h5>
+            <p class="text-muted small mb-0">{{ user.email }}</p>
+            <span class="badge rounded-pill bg-primary mt-2">
+              {% if user.is_seller %}Seller Account{% else %}Customer{% endif %}
+            </span>
+          </div>
+          <div class="list-group list-group-flush">
+            <a
+              href="{% url 'dash' %}"
+              class="list-group-item list-group-item-action py-3"
+            >
+              <i class="fas fa-th-large me-2 text-primary"></i>
+              Dashboard
+            </a>
+            <a
+              href="{% url 'order_history' %}"
+              class="list-group-item list-group-item-action py-3"
+            >
+              <i class="fas fa-shopping-bag me-2 text-primary"></i>
+              My Orders
+            </a>
+            <a
+              href="{% url 'loyalty' %}"
+              class="list-group-item list-group-item-action py-3"
+            >
+              <i class="fas fa-crown me-2 text-primary"></i>
+              MyGLH Rewards
+            </a>
+            <a
+              href="{% url 'edit_profile' %}"
+              class="list-group-item list-group-item-action py-3"
+            >
+              <i class="fas fa-user-edit me-2 text-primary"></i>
+              Edit Profile
+            </a>
+            {% if user.is_seller %}
+            <a
+              href="{% url 'my_stores' %}"
+              class="list-group-item list-group-item-action py-3"
+            >
+              <i class="fas fa-store me-2 text-primary"></i>
+              My Stores
+            </a>
+            {% endif %}
+            <a
+              href="{% url 'logout' %}"
+              class="list-group-item list-group-item-action py-3 text-danger"
+            >
+              <i class="fas fa-sign-out-alt me-2"></i>
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-3 p-4 mb-4">
+        <h4 class="fw-bold mb-4">At A Glance</h4>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-shopping-basket text-primary mb-2 fa-lg"></i>
+              <a href="{% url 'order_history' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Total Orders
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0">{{ my_orders.count }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-crown text-warning mb-2 fa-lg"></i>
+              <a href="{% url 'loyalty' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  MyGLH Points
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0">{{ user.loyalty_account.points }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-calendar-alt text-success mb-2 fa-lg"></i>
+              <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                Member Since
+              </h6>
+              <h4 class="fw-bold mb-0" style="font-size: 1.1rem">
+                {{ user.date_joined|date:"M Y" }}
+              </h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-shopping-cart text-danger mb-2 fa-lg"></i>
+              <a href="{% url 'view_cart' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  My Basket
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0">{{ user.cart.items.count|default:"0" }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-medal text-secondary mb-2 fa-lg"></i>
+              <a href="{% url 'loyalty' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Tier
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0" style="font-size: 1.1rem">
+                {% if user.loyalty_account.tier == 'Gold' %}Gold {% elif user.loyalty_account.tier == 'Silver' %}Silver
+                {% else %}Bronze{% endif %}
+              </h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-wallet text-info mb-2 fa-lg"></i>
+              <a href="{% url 'order_history' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Total Spent
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0" style="font-size: 1.1rem">
+                £{{ total_spent|default:"0.00" }}
+              </h4>
+            </div>
+          </div>
+
+          {% if user.is_seller %}
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-store text-info mb-2 fa-lg"></i>
+              <a href="{% url 'my_stores' %}" class="text-decoration-none">
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  My Stores
+                </h6>
+              </a>
+              <h4 class="fw-bold mb-0">{{ user.stores.count|default:"0" }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-box-open text-info mb-2 fa-lg"></i>
+              <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                Total Products
+              </h6>
+              <h4 class="fw-bold mb-0">{{ products.count|default:"0" }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 text-center border">
+              <i class="fas fa-receipt text-info mb-2 fa-lg"></i>
+              <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                Store Orders
+              </h6>
+              <h4 class="fw-bold mb-0">{{ orders.count|default:"0" }}</h4>
+            </div>
+          </div>
+          <div class="col-12 text-center mt-2">
+            <a
+              href="{% url 'my_stores' %}"
+              class="btn btn-sm btn-primary rounded-pill px-4"
+            >
+              Manage My Business
+            </a>
+          </div>
+          {% else %}
+          <div class="col-12 text-center py-3">
+            <p class="text-muted mb-3">
+              You are currently registered as a customer. Want to sell your own
+              local products?
+            </p>
+            <a
+              href="{% url 'register_seller' %}"
+              class="btn btn-outline-success rounded-pill px-4"
+            >
+              Become a Seller
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3 p-4 mb-4">
+        <h4 class="fw-bold mb-4">Account Details</h4>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label text-muted small text-uppercase fw-bold">
+              First Name
+            </label>
+            <p class="fw-medium border-bottom pb-2">{{ user.first_name }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small text-uppercase fw-bold">
+              Last Name
+            </label>
+            <p class="fw-medium border-bottom pb-2">{{ user.last_name }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small text-uppercase fw-bold">
+              Email Address
+            </label>
+            <p class="fw-medium border-bottom pb-2">{{ user.email }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small text-uppercase fw-bold">
+              Username
+            </label>
+            <p class="fw-medium border-bottom pb-2">{{ user.username }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3 p-4">
+        <h4 class="fw-bold mb-4">Recent Activity</h4>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="border-0">Order ID</th>
+                <th class="border-0">Date</th>
+                <th class="border-0">Status</th>
+                <th class="border-0 text-end">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders|slice:":5" %}
+              <tr>
+                <td class="fw-bold">#{{ order.id }}</td>
+                <td class="text-muted small">{{ order.created_at|date:"d M Y" }}</td>
+                <td>
+                  <span
+                    class="badge rounded-pill {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Pending' %}bg-warning text-dark{% else %}bg-secondary{% endif %}"
+                  >
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td class="text-end fw-bold">£{{ order.total_amount }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center py-4 text-muted">
+                  No recent orders found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center mt-3">
+          <a
+            href="{% url 'order_history' %}"
+            class="btn btn-sm btn-outline-primary rounded-pill px-4"
+          >
+            View All Orders
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

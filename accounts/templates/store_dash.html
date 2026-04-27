@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ store.name }} Dashboard{% endblock %}
+{% block hero_text %}{{ store.name }} Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row g-4">
+    <!-- Sidebar Navigation -->
+
+    {% include 'components/store_sidebar.html'%}
+
+    <!-- Main Content Area -->
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Store Dashboard</h2>
+        <div class="btn-group">
+          <a
+            href="{% url 'edit_store' store.pk %}"
+            class="btn btn-outline-primary rounded-pill px-4 me-2"
+          >
+            <i class="fas fa-pencil me-2"></i>
+            Edit Store
+          </a>
+          <a href="{% url 'add_product' store.pk %}" class="btn btn-primary rounded-pill px-4">
+            <i class="fas fa-plus me-2"></i>
+            Add Product
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-light-primary p-3 me-3">
+                <i class="fas fa-shopping-bag text-primary fa-lg"></i>
+              </div>
+              <div>
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Total Orders
+                </h6>
+                <h3 class="fw-bold mb-0">{{ store.orders.count|default:"0" }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-light-success p-3 me-3">
+                <i class="fas fa-box-open text-success fa-lg"></i>
+              </div>
+              <div>
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Products
+                </h6>
+                <h3 class="fw-bold mb-0">{{ store.products.count }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-light-info p-3 me-3">
+                <i class="fas fa-ticket-alt text-info fa-lg"></i>
+              </div>
+              <div>
+                <h6 class="text-muted small text-uppercase fw-bold mb-1">
+                  Active Coupons
+                </h6>
+                <h3 class="fw-bold mb-0">{{ coupons.count|default:"0" }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="card border-0 shadow-sm rounded-3 p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0">Recent Store Orders</h4>
+          <a href="{% url 'store_orders' store.pk %}
+          " class="btn btn-sm btn-link text-decoration-none">
+            View All
+          </a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="border-0">Order ID</th>
+                <th class="border-0">Customer</th>
+                <th class="border-0">Date</th>
+                <th class="border-0">Status</th>
+                <th class="border-0 text-end">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders|slice:":5" %}
+              <tr>
+                <td class="fw-bold">#{{ order.id }}</td>
+                <td>{{ order.customer.get_first_name|default:order.customer.username }}</td>
+                <td class="text-muted small">{{ order.created_at|date:"d M Y" }}</td>
+                <td>
+                  <span
+                    class="badge rounded-pill {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Pending' %}bg-warning text-dark{% else %}bg-secondary{% endif %}"
+                  >
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td class="text-end fw-bold">£{{ order.total_amount }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center py-4 text-muted">
+                  No orders found for this store yet.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

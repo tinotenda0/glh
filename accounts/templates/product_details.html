@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ product.name }} {% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+  <h2 class="fw-bold">{{ product.name }}</h2>
+  <p class="text-muted">Product Details</p>
+</div>
+
+<div class="card shadow-sm mb-4">
+  {% if product.image %}
+  <img
+    src="{{ product.image.url }}"
+    class="card-img-top"
+    alt="{{ product.name }}"
+    style="max-height: 400px; object-fit: contain; background-color: #f8f9fa"
+  />
+  {% endif %}
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <h4 class="fw-bold text-primary mb-0">£{{ product.price }}</h4>
+        <span class="badge bg-info text-dark">{{ product.category }}</span>
+      </div>
+      <div class="text-end">
+        {% if product.stock_quantity > 0 %}
+        <span class="badge bg-success">In Stock: {{ product.stock_quantity }}</span>
+        {% else %}
+        <span class="badge bg-danger">Out of Stock</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <h5 class="fw-bold">Description</h5>
+    <p class="text-muted">{{ product.description }}</p>
+
+    <hr />
+
+    <div class="row text-center small text-muted">
+      <div class="col-6 border-end">
+        <p class="mb-0">Store</p>
+        <p class="fw-bold text-dark mb-0">{{ product.store.name }}</p>
+      </div>
+      <div class="col-6">
+        <p class="mb-0">Category</p>
+        <p class="fw-bold text-dark mb-0">{{ product.type }}</p>
+      </div>
+
+      <div class="col-6">
+        <p class="mb-0">Last Updated</p>
+        <p class="fw-bold text-dark mb-0">{{ product.updated_at|date:"d M Y" }}</p>
+      </div>
+      <div class="col-6">
+        <p class="mb-0">Added On</p>
+        <p class="fw-bold text-dark mb-0">{{ product.created_at|date:"d M Y" }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-grid gap-2">
+  {% if user.is_authenticated and user == product.store.owner %}
+  <a href="{% url 'edit_product' product.pk %}" class="btn btn-primary btn-lg">
+    <i class="fas fa-edit me-2"></i>
+    Edit {{ product.name }}
+  </a>
+  <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-lg">
+    <i class="fas fa-trash me-2"></i>
+    Delete {{ product.name }}
+  </a>
+  <a href="{% url 'manage_products' product.store.pk %}" class="btn btn-outline-secondary">
+    <i class="fas fa-arrow-left me-2"></i>
+    Back to Inventory
+  </a>
+  {% else %}
+  <form action="{% url 'add_to_cart' product.pk %}" method="post">
+    {% csrf_token %}
+    <button
+      type="submit"
+      class="btn btn-success btn-lg w-100"
+      {% if product.stock_quantity <= 0 %}disabled{% endif %}
+    >
+      <i class="fas fa-cart-plus me-2"></i>
+      Add to Basket
+    </button>
+  </form>
+  <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+    <i class="fas fa-shopping-bag me-2"></i>
+    Continue Shopping
+  </a>
+  {% endif %}
+</div>
+{% endblock %}
