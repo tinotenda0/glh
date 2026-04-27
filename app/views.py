@@ -11,6 +11,9 @@ def index(request):
     stores = Store.objects.all()
     return render(request, "index.html", {"stores": stores} )
 
+def questions(request):
+    return render(request, "questions.html")
+
 def stores(request):
     # Render the stores directory page showing all stores and available coupons
     stores = Store.objects.all()
