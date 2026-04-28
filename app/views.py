@@ -14,6 +14,13 @@ def index(request):
 def questions(request):
     return render(request, "questions.html")
 
+def techguide(request):
+    return render(request, "tech-guide.html")
+
+def guide(request):
+    return render(request, "n-tech-guide.html")
+
+
 def stores(request):
     # Render the stores directory page showing all stores and available coupons
     stores = Store.objects.all()

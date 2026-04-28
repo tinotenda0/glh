@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Non Technical User Guide{% endblock %}
+
+{% block content %}
+    <h1>User Guide</h1>
+    <p>Welcome to the GreenField Local Hub! This guide will help you, whether you're a customer looking for fresh local goods or a seller wanting to set up your own digital storefront. [1]</p>
+
+    <hr>
+
+    <h2>For Customers</h2>
+    <p>As a customer, you can browse stores, purchase products, and participate in our loyalty program. [1]</p>
+
+    <h4>Getting Started</h4>
+    <ul>
+        <li><strong>Registration:</strong> To get started, you'll need to <a href="{% url 'register_customer' %}">create a customer account</a>. This automatically enrolls you in our loyalty program! [1, 2]</li>
+        <li><strong>Logging In:</strong> Once registered, you can <a href="{% url 'login' %}">log in</a> to access your account and start shopping. [2]</li>
+    </ul>
+
+    <h4>Shopping</h4>
+    <ul>
+        <li><strong>Browsing:</strong> Explore various stores and the products they offer.</li>
+        <li><strong>Adding to Cart:</strong> See something you like? Simply click "Add to Cart" to add it to your shopping basket. [2]</li>
+        <li><strong>Viewing Your Cart:</strong> You can <a href="{% url 'view_cart' %}">view your cart</a> at any time to see the items you've selected, update quantities, or remove items. [2]</li>
+    </ul>
+
+    <h4>Checkout & Payments</h4>
+    <ul>
+        <li><strong>Checkout:</strong> When you're ready to buy, proceed to the <a href="{% url 'checkout' %}">checkout page</a>. [2]</li>
+        <li><strong>Applying Coupons:</strong> If you have a coupon code, you can apply it in the cart to receive a discount. [1, 2]</li>
+        <li><strong>Using Loyalty Points:</strong> You can choose to redeem your loyalty points at checkout for a discount on your order. [1, 2]</li>
+    </ul>
+
+    <h4>Your Account</h4>
+    <ul>
+        <li><strong>Profile Management:</strong> You can <a href="{% url 'edit_profile' %}">edit your profile</a> information at any time. [2]</li>
+        <li><strong>Order History:</strong> Keep track of all your past purchases in your <a href="{% url 'order_history' %}">order history</a>. [1, 2]</li>
+        <li><strong>Loyalty Program:</strong> Visit the <a href="{% url 'loyalty' %}">loyalty program</a> page to check your points balance and current tier (Bronze, Silver, or Gold). You earn 1 point for every $1 spent, and 10 points can be redeemed for a $1 discount. [1, 2]</li>
+    </ul>
+
+    <hr>
+
+    <h2>For Sellers</h2>
+    <p>As a seller, you can create your own stores, manage products, and track your sales.</p>
+
+    <h4>Getting Started</h4>
+    <ul>
+        <li><strong>Registration:</strong> To become a seller, you must first have a customer account. Once you are logged in as a customer, you can <a href="{% url 'register_seller' %}">register to become a seller</a>. This will update your account role. [2]</li>
+    </ul>
+
+    <h4>Store Management</h4>
+    <ul>
+        <li><strong>Create a Store:</strong> Set up one or more digital storefronts using the <a href="{% url 'create_store' %}">create store</a> page. [1, 2]</li>
+        <li><strong>My Stores:</strong> You can view, edit, or delete your stores from the <a href="{% url 'my_stores' %}">My Stores</a> page. [2]</li>
+        <li><strong>Store Dashboard:</strong> Each store has its own dashboard where you can see its products and orders. [2]</li>
+    </ul>
+
+    <h4>Product Management</h4>
+    <ul>
+        <li><strong>Adding Products:</strong> Add new products to your store, including details like name, description, price, and stock quantity. [1, 2]</li>
+        <li><strong>Managing Products:</strong> From your store's dashboard, you can go to "Manage Products" to edit or delete existing products and update their stock levels. [2]</li>
+    </ul>
+
+    <h4>Orders & Coupons</h4>
+    <ul>
+        <li><strong>Store Orders:</strong> Track all orders placed at your store and update their status (e.g., from 'Paid' to 'Shipped'). [1, 2]</li>
+        <li><strong>Coupon Creation:</strong> You can create promotional coupons for your customers. These can be percentage-based discounts and can even be restricted to customers in specific loyalty tiers (e.g., a "Gold" tier exclusive coupon). [1, 2]</li>
+        <li><strong>Manage Coupons:</strong> View, edit, or delete your store's coupons from the coupon management page. [2]</li>
+    </ul>
+
+    <hr>
+
+    <h4>Existing User Credentials for Testing</h4>
+    <p>If you are testing the site, you can use these pre-existing accounts:</p>
+    <table class="table">
+        <thead><tr><th>Role</th><th>Username</th><th>Password</th></tr></thead>
+        <tbody>
+            <tr><td>Customer</td><td>tino</td><td>secure123</td></tr>
+            <tr><td>Seller</td><td>bob</td><td>secure123</td></tr>
+        </tbody>
+    </table>
+{% endblock %}
