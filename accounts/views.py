@@ -106,12 +106,15 @@ def logout(request):
 @group_required('Seller')
 def create_store(request):
     # Handle the creation of a new store by a seller
-    form = CreateStoreForm(request.POST, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        store = form.save(commit=False)
-        store.owner = request.user
-        store.save()
-        return render(request, "dash.html", {"message": "Store created successfully!"})
+    if request.method == "POST":
+        form = CreateStoreForm(request.POST, request.FILES)
+        if form.is_valid():
+            store = form.save(commit=False)
+            store.owner = request.user
+            store.save()
+            return render(request, "dash.html", {"message": "Store created successfully!"})
+    else:
+        form = CreateStoreForm()
     return render(request, "create_store.html", {"form": form})
 
 @group_required('Seller')
@@ -121,7 +124,7 @@ def edit_store(request, store_id):
     from django.shortcuts import get_object_or_404, redirect
     store = get_object_or_404(Store, id=store_id, owner=request.user)
     if request.method == "POST":
-        form = CreateStoreForm(request.POST, request.FILES or None, instance=store)
+        form = CreateStoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
             form.save()
             return redirect('my_stores')
@@ -160,15 +163,18 @@ def store_dash(request, store_id):
 @group_required('Seller')
 def add_product(request, store_id):
     # Handle adding a new product to a specific store
-    form = ProductForm(request.POST, request.FILES or None)
     from accounts.models import Store
     from django.shortcuts import get_object_or_404
     store = get_object_or_404(Store, id=store_id, owner=request.user)
-    if request.method == "POST" and form.is_valid():
-        product = form.save(commit=False)
-        product.store = store
-        product.save()
-        return render(request, "dash.html", {"message": "Product added successfully!"})
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.store = store
+            product.save()
+            return render(request, "dash.html", {"message": "Product added successfully!"})
+    else:
+        form = ProductForm()
     return render(request, "add_product.html", {"form": form, "store": store})
 
 @group_required('Seller')
@@ -195,7 +201,7 @@ def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, store__owner=request.user)
     store = product.store
     if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES or None, instance=product)
+        form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
             # Update out of stock status if stock = more than 1
@@ -488,7 +494,7 @@ def add_coupon(request, store_id):
         if form.is_valid():
             coupon = form.save(commit=False)
             coupon.store = store
-            form.save()
+            coupon.save()
             return redirect('manage_coupons', store_id=store.id)
     else:
         form = CouponForm()
@@ -547,7 +553,7 @@ def apply_coupon(request):
         code = request.POST.get('coupon_code')
         try:
             coupon = Coupon.objects.get(code=code, is_active=True, expiry_date__gt=timezone.now())
-            loyalty_account = LoyaltyProgram.objects.get(customer=request.user)
+            loyalty_account, _ = LoyaltyProgram.objects.get_or_create(customer=request.user)
             
             # Check if user meets the tier requirement
             tiers = ['Bronze', 'Silver', 'Gold']
